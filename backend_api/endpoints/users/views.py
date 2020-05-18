@@ -4,27 +4,21 @@ from flask_restful import Resource
 from backend_api.endpoints.user.assemble import Assembler
 from backend_api.endpoints.user.model import UserResponseModel, TelephoneModel, UserInputModel
 from backend_api.manager.factory import ManagerSimplifiedFactory
+from flask import request
 
-
-class UserResponse(Resource):
+class UsersResponse(Resource):
 
     @swagger.doc({
-        'tags': ['user-get'],
+        'tags': ['users-post'],
         'description': 'Returns a user',
         'parameters': [
             {
-                'name': 'username',
-                'description': 'Name of the user',
-                'in': 'path',
-                'type': 'string'
-            },
-            {
-                'name': 'surname',
-                'description': 'Surname of the user',
-                'in': 'query',
-                'type': 'string',
-                'required': False,
-            },
+                'name': 'body',
+                'description': 'The cluster create operation parameters.',
+                'in': 'body',
+                'schema': UserInputModel,
+                'required': True,
+            }
         ],
         'responses': {
             '200': {
@@ -38,9 +32,14 @@ class UserResponse(Resource):
                 }
             }
         }
-     })
-    def get(self, username, _parser):
+    })
+    def post(self):
 
+        body = request.get_json()
+        username = body['Name']
+        surename = body['SurName']
+
+        username = "{}-{}".format(username, surename)
         user_manager = ManagerSimplifiedFactory().get_user_manager()
         user_details, telephone_details = user_manager.get_user_data(user=username)
 

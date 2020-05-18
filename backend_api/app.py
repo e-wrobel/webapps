@@ -4,8 +4,10 @@ from flask_swagger_ui import get_swaggerui_blueprint
 
 # Import resources
 from backend_api.endpoints.user.views import UserResponse
+from backend_api.endpoints.users.views import UsersResponse
 
 # Initialize flask
+
 app = Flask(__name__)
 api = Api(app, api_version='1.0')
 
@@ -27,6 +29,7 @@ app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 # Add resources
 api.add_resource(UserResponse, '/user/<string:username>')
+api.add_resource(UsersResponse, '/users')
 
 if __name__ == '__main__':
     app.run()
